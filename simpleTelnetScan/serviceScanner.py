@@ -66,8 +66,8 @@ class ServiceScanner(object):
                     self._statNbTry += 1
                     s.connect((host, self.port))
 
-                    self.ipList.append(host)
-                    self._statNbFind+= 1  
+                    self.ipList.append(host+':'+self.port)
+                    self._statNbFind += 1  
                     
                     deltaTime = time.perf_counter() - self._statStartTime               
                     self.logger.info("Find " + host + ":" + str(self.port) + " open !" )
