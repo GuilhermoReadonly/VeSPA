@@ -1,14 +1,12 @@
 '''
-Created on 13 déc. 2016
-
 @author: wardog
 '''
 
 import logging
 import traceback
 import time
-from simpleTelnetScan.torManager import TorManager
-from simpleTelnetScan.serviceScanner import ServiceScanner
+from VErySimplePortAttackToolkit.torManager import TorManager
+from VErySimplePortAttackToolkit.serviceScanner import ServiceScanner
 
 if __name__ == '__main__':
     logger = logging.getLogger()
@@ -34,7 +32,7 @@ if __name__ == '__main__':
         torManager.connect() 
         
         logger.debug('Init scanner')
-        serviceScan = ServiceScanner(23,3,100)
+        serviceScan = ServiceScanner(23,3,300,'targets.csv')
         
         logger.debug('Start scanner')
         serviceScan.startScan()
@@ -44,11 +42,12 @@ if __name__ == '__main__':
         logging.getLogger().error("Error occurs : " + traceback.format_exc())
     
     finally:
-        time.sleep(100)
+        time.sleep(60*15)
         
         serviceScan.stopScan()
         
-        time.sleep(1)
+        time.sleep(3)
+        logger.debug('Scanners stopped')
         torManager.disconnect()
         
         logger.info('Quit app.')

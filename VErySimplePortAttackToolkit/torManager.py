@@ -7,9 +7,7 @@ import stem.process
 import traceback
 
 class TorManager(object):
-    '''
-    classdocs
-    '''
+
     port = '7000'
     exitNode = 'ru'
     torProcess = None
@@ -39,7 +37,7 @@ class TorManager(object):
 
     def disconnect(self):
         if self.torProcess != None:
-            logging.getLogger().debug("Starting Tor")
+            logging.getLogger().debug("Stoping Tor")
             self.torProcess.terminate()    
         
     def print_bootstrap_lines(self,line):
