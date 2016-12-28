@@ -5,10 +5,20 @@
 import logging
 import traceback
 import time
+import argparse
 from VErySimplePortAttackToolkit.torManager import TorManager
 from VErySimplePortAttackToolkit.serviceScanner import ServiceScanner
 
 if __name__ == '__main__':
+    
+    
+    parser = argparse.ArgumentParser(description="VeSPA : the VEry Simple Port Attack tool.")
+    parser.add_argument("-d", "--dictionary-file")
+    parser.add_argument("-p","--port", type=int, help='tcp port number to scan')
+    parser.add_argument("-en","--exit-node")
+    parser.add_argument("-ts","--threads-scanner", type=int, help='number of threads for port scanner. Default is 1.')
+
+  
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     
@@ -23,16 +33,26 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     
+    
+    args = parser.parse_args()
+
+    
+        
+    if args.dictionary_file:
+        dicFile = args.dictionary_file
+        print(dicFile)
+        
+    
     logger.info('Start app.')
     
     try :
                
         logger.debug('Start tor')
-        torManager = TorManager('7000','ru') #choose exit node in russia
+        torManager = TorManager('7000',args.exit_node) #choose exit node in russia
         torManager.connect() 
         
         logger.debug('Init scanner')
-        serviceScan = ServiceScanner(23,3,300,'targets.csv')
+        serviceScan = ServiceScanner(args.port,3,args.threads_scanner,'targets.csv')
         
         logger.debug('Start scanner')
         serviceScan.startScan()

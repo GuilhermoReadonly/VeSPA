@@ -15,15 +15,17 @@ class TorManager(object):
     def __init__(self, port,exitNode):
         self.port = port
         self.exitNode = exitNode
-        logging.getLogger().debug("Init Tor with port=" + self.port + " exitNode=" + self.exitNode)
+        logging.getLogger().debug("Init Tor with port=" + self.port + " exitNode=" + str(self.exitNode))
         
     def connect(self):
         logging.getLogger().debug("Starting Tor")
 
         configTor = {
-        'SocksPort': self.port,
-        'ExitNodes': '{' + self.exitNode + '}',
+        'SocksPort': self.port
         }
+        
+        if(self.exitNode != None):
+            configTor['ExitNodes'] = '{' + self.exitNode + '}'
         
         try:
             self.torProcess = stem.process.launch_tor_with_config(config = configTor,init_msg_handler = self.print_bootstrap_lines)

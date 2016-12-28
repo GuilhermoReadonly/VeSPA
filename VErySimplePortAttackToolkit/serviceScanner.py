@@ -27,12 +27,17 @@ class ServiceScanner(object):
     _statNbFind = 0
     _statStartTime = time.perf_counter()
 
-    def __init__(self, port, timeout, nbThread, targetsFile):
+    def __init__(self, port = 7000, timeout = 1, nbThread = 1, targetsFile = 'targets.csv'):
         self.logger = logging.getLogger()
         self.port = port
         self.timeout = timeout
-        self.nbThread = nbThread
+        
         self.targetsFile = targetsFile
+        
+        if nbThread == None:
+            nbThread = 1
+            
+        self.nbThread = nbThread
 
         
     def stopScan(self):
